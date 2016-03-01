@@ -40,6 +40,7 @@ public class InweboConnectorConstants {
     public static final String AXIS2 = "axis2.xml";
     public static final String AXIS2_FILE = "repository/conf/axis2/axis2_inwebo.xml";
     public static final String INWEBO_LANG_ENGLISH = "En";
+
     class InweboConnectorClaims {
         public static final String IDP_CLAIM_URI_FIRSTNAME = "firstName";
         public static final String IDP_CLAIM_URI_LARSTNAME = "lastName";
@@ -51,6 +52,7 @@ public class InweboConnectorConstants {
         public static final String MAIL_CLAIM = "http://wso2.org/claims/emailaddress";
         public static final String PHONE_CLAIM = "http://wso2.org/claims/telephone";
     }
+
     class InweboConnectorSOAPMessageConstants {
         public static final String SOAP_ACTION = "SOAPAction";
         public static final String SOAP_ACTION_HEADER = "/services/ConsoleAdmin";
