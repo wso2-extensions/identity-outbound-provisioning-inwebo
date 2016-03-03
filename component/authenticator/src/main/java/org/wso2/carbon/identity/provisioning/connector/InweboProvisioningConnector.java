@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2015-2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  WSO2 Inc. licenses this file to you under the Apache License,
  *  Version 2.0 (the "License"); you may not use this file except
@@ -100,7 +100,6 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
                 String mail = StringUtils.isNotEmpty(emailClaim) ? emailClaim : "";
                 String phone = StringUtils.isNotEmpty(phoneClaim) ? phoneClaim : "";
 
-
                 if (provisioningEntity.isJitProvisioning() && !isJitProvisioningEnabled()) {
                     if (log.isDebugEnabled()) {
                         log.debug("JIT provisioning disabled for inwebo connector");
@@ -112,9 +111,6 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
                     if (provisioningEntity.getOperation() == ProvisioningOperation.POST) {
                         provisionedId = createUser(provisioningEntity, userId, serviceId, login, firstName,
                                 name, mail, phone, status, role, access, codeType, language, extraFields, p12file, p12password);
-                        if (StringUtils.isNotEmpty(provisionedId) && !provisionedId.equals("0")) {
-                            log.info("User creation in InWebo is done.");
-                        }
                     } else if (provisioningEntity.getOperation() == ProvisioningOperation.PUT) {
                         String loginFromClaim = provisioningEntity.getAttributes().get(ClaimMapping
                                 .build(InweboConnectorConstants.InweboConnectorClaims.USERNAME_CLAIM, null,
@@ -155,7 +151,7 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
             }
             // creates a provisioned identifier for the provisioned user.
             ProvisionedIdentifier identifier = new ProvisionedIdentifier();
-            if (StringUtils.isNotEmpty(provisionedId) && !provisionedId.equals("0")) {
+            if (StringUtils.isNotEmpty(provisionedId) && !"0".equals(provisionedId)) {
                 identifier.setIdentifier(provisionedId);
             }
             return identifier;
@@ -175,7 +171,6 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
             Util.setHttpsClientCert(p12file, p12password);
         } catch (Exception e) {
             throw new IdentityProvisioningException("Error while adding certificate", e);
-
         }
         try {
             UserCreation userCreation = new UserCreation();
@@ -196,7 +191,6 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
             Util.setHttpsClientCert(p12file, p12password);
         } catch (Exception e) {
             throw new IdentityProvisioningException("Error while adding certificate", e);
-
         }
         try {
             String loginId = provisioningEntity.getIdentifier().getIdentifier();
@@ -212,8 +206,8 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
      * @param provisioningEntity
      * @throws IdentityProvisioningException
      */
-    private void deleteUser(ProvisioningEntity provisioningEntity, String serviceId, String userId, String p12file, String p12password)
-            throws IdentityProvisioningException {
+    private void deleteUser(ProvisioningEntity provisioningEntity, String serviceId, String userId, String p12file,
+                            String p12password) throws IdentityProvisioningException {
         boolean deletionStatus = false;
         try {
             Util.setHttpsClientCert(p12file, p12password);

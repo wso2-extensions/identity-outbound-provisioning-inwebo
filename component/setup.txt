@@ -1,0 +1,20 @@
+Product: WSO2 IS outbound provisioning connector for Inwebo
+Pre-requisites:
+
+- Maven 3.x
+- Java 1.6 or above
+
+Tested Platform: 
+
+- Mac OSx 10.9
+- WSO2 IS 5.1.0
+- Java 1.7
+
+Do the following:
+
+Deploying and Configuring Tiqr artifacts:
+1.  Build & copy the org.wso2.carbon.identity.provisioning.connector.inwebo-1.0.0.jar into <IS-HOME>/repository/components/dropins
+
+2.  Copy the given resources/axis2_inwebo.xml into <IS-HOME>/repository/conf/axis2
+
+3.  Follow the steps in https://docs.wso2.com/display/ISCONNECTORS/Configuring+Inwebo+Provisioning
