@@ -13,8 +13,8 @@ Tested Platform:
 Do the following:
 
 Deploying and Configuring Tiqr artifacts:
-1.  Build & copy the org.wso2.carbon.identity.provisioning.connector.inwebo-1.0.0.jar into <IS-HOME>/repository/components/dropins
+1.  Build <INWEBO_PROVISIONING_COMNNECTOR_HOME>/component/authenticator & copy the org.wso2.carbon.identity.provisioning.connector.inwebo-1.0.0.jar into <IS-HOME>/repository/components/dropins
 
-2.  Copy the given resources/axis2_inwebo.xml into <IS-HOME>/repository/conf/axis2
+2.  Copy the given <INWEBO_PROVISIONING_COMNNECTOR_HOME>/component/authenticator/resources/axis2_inwebo.xml into <IS-HOME>/repository/conf/axis2
 
 3.  Follow the steps in https://docs.wso2.com/display/ISCONNECTORS/Configuring+Inwebo+Provisioning
