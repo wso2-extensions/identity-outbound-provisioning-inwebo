@@ -26,7 +26,7 @@
     <groupId>org.wso2.carbon.identity.provisioning.connector</groupId>
     <artifactId>org.wso2.carbon.identity.provisioning.connector.inwebo.feature</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Carbon - identity Inwebo Provisioning Feature</name>
+    <name>WSO2 Carbon - Identity Inwebo Provisioning Feature</name>
     <url>http://wso2.org</url>
     <description>This feature contains extension feature for Inwebo</description>
     <dependencies>
