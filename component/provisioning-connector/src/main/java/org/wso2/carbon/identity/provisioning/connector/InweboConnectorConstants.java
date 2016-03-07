@@ -23,10 +23,6 @@ public class InweboConnectorConstants {
     public static final String INWEBO_P12FILE = "P12file";
     public static final String INWEBO_P12PASSWORD = "P12KeystorePassword";
     public static final String INWEBO_USER_ID = "UserId";
-    public static final String INWEBO_FIRSTNAME = "FirstName";
-    public static final String INWEBO_NAME = "Name";
-    public static final String INWEBO_MAIL = "Mail";
-    public static final String INWEBO_PHONENUMBER = "PhoneNumber";
     public static final String INWEBO_STATUS = "Status";
     public static final String INWEBO_ROLE = "Role";
     public static final String INWEBO_ACCESS = "Access";
