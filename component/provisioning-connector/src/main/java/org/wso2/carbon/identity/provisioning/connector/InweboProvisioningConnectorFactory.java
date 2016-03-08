@@ -119,18 +119,11 @@ public class InweboProvisioningConnectorFactory extends AbstractProvisioningConn
         codeType.setDisplayOrder(7);
         configProperties.add(codeType);
 
-        Property language = new Property();
-        language.setName(InweboConnectorConstants.INWEBO_LANG);
-        language.setDisplayName("Language");
-        language.setDescription("Enter the language");
-        language.setDisplayOrder(8);
-        configProperties.add(language);
-
         Property extraFields = new Property();
         extraFields.setName(InweboConnectorConstants.INWEBO_EXTRAFIELDS);
         extraFields.setDisplayName("Extra Fields");
         extraFields.setDescription("Enter the extra fields");
-        extraFields.setDisplayOrder(9);
+        extraFields.setDisplayOrder(8);
         configProperties.add(extraFields);
 
         return configProperties;

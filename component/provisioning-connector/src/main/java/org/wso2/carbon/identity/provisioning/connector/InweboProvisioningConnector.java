@@ -63,43 +63,36 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
         try {
             String provisionedId = null;
             if (provisioningEntity != null) {
-                String login = provisioningEntity.getEntityName().toString();
-                String userId = configHolder.getValue(InweboConnectorConstants.INWEBO_USER_ID);
-                String serviceId = configHolder.getValue(InweboConnectorConstants.INWEBO_SERVICE_ID);
                 String p12file = configHolder.getValue(InweboConnectorConstants.INWEBO_P12FILE);
                 String p12password = configHolder.getValue(InweboConnectorConstants.INWEBO_P12PASSWORD);
+                String userId = configHolder.getValue(InweboConnectorConstants.INWEBO_USER_ID);
+                String serviceId = configHolder.getValue(InweboConnectorConstants.INWEBO_SERVICE_ID);
                 String status = configHolder.getValue(InweboConnectorConstants.INWEBO_STATUS);
                 String role = configHolder.getValue(InweboConnectorConstants.INWEBO_ROLE);
-                String access = configHolder.getValue(InweboConnectorConstants.INWEBO_ACCESS);
-                String codeType = configHolder.getValue(InweboConnectorConstants.INWEBO_CODETYPE);
                 String extraFields = StringUtils.isNotEmpty(configHolder.getValue(InweboConnectorConstants.INWEBO_EXTRAFIELDS))
                         ? configHolder.getValue(InweboConnectorConstants.INWEBO_EXTRAFIELDS) : "";
-                String language = StringUtils.isNotEmpty(configHolder.getValue(InweboConnectorConstants.INWEBO_LANG))
-                        ? configHolder.getValue(InweboConnectorConstants.INWEBO_LANG)
-                        : InweboConnectorConstants.INWEBO_LANG_ENGLISH;
 
                 String firstNameClaim = provisioningEntity.getAttributes().get(ClaimMapping
-                        .build(InweboConnectorConstants.InweboConnectorClaims.FIRST_NAME_CLAIM,
-                                InweboConnectorConstants.InweboConnectorClaims.IDP_CLAIM_URI_FIRSTNAME,
+                        .build(InweboConnectorConstants.ConnectorClaims.FIRST_NAME_CLAIM,
+                                InweboConnectorConstants.ConnectorClaims.IDP_CLAIM_URI_FIRSTNAME,
                                 (String) null, false)).get(0);
                 String lastNameClaim = provisioningEntity.getAttributes().get(ClaimMapping
-                        .build(InweboConnectorConstants.InweboConnectorClaims.LAST_NAME_CLAIM,
-                                InweboConnectorConstants.InweboConnectorClaims.IDP_CLAIM_URI_LARSTNAME,
+                        .build(InweboConnectorConstants.ConnectorClaims.LAST_NAME_CLAIM,
+                                InweboConnectorConstants.ConnectorClaims.IDP_CLAIM_URI_LARSTNAME,
                                 (String) null, false)).get(0);
                 String emailClaim = provisioningEntity.getAttributes().get(ClaimMapping
-                        .build(InweboConnectorConstants.InweboConnectorClaims.MAIL_CLAIM,
-                                InweboConnectorConstants.InweboConnectorClaims.IDP_CLAIM_URI_EMAIL,
+                        .build(InweboConnectorConstants.ConnectorClaims.MAIL_CLAIM,
+                                InweboConnectorConstants.ConnectorClaims.IDP_CLAIM_URI_EMAIL,
                                 (String) null, false)).get(0);
                 String phoneClaim = provisioningEntity.getAttributes().get(ClaimMapping
-                        .build(InweboConnectorConstants.InweboConnectorClaims.PHONE_CLAIM,
-                                InweboConnectorConstants.InweboConnectorClaims.IDP_CLAIM_URI_PHONE,
+                        .build(InweboConnectorConstants.ConnectorClaims.PHONE_CLAIM,
+                                InweboConnectorConstants.ConnectorClaims.IDP_CLAIM_URI_PHONE,
                                 (String) null, false)).get(0);
-
-                String firstName = StringUtils.isNotEmpty(firstNameClaim) ? firstNameClaim : "";
-                String name = StringUtils.isNotEmpty(lastNameClaim) ? lastNameClaim : "";
-                String mail = StringUtils.isNotEmpty(emailClaim) ? emailClaim : "";
-                String phone = StringUtils.isNotEmpty(phoneClaim) ? phoneClaim : "";
-
+                if (StringUtils.isEmpty(firstNameClaim) || StringUtils.isEmpty(lastNameClaim)
+                        || StringUtils.isEmpty(emailClaim) || StringUtils.isEmpty(phoneClaim)) {
+                    log.error("Claims are not set properly.");
+                    throw new IdentityProvisioningException("Claims are not set properly.");
+                }
                 if (provisioningEntity.isJitProvisioning() && !isJitProvisioningEnabled()) {
                     if (log.isDebugEnabled()) {
                         log.debug("JIT provisioning disabled for inwebo connector");
@@ -107,39 +100,42 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
                     return null;
                 }
                 if (provisioningEntity.getEntityType() == ProvisioningEntityType.USER) {
+                    InweboUser user = new InweboUser();
+                    user.setFirstName(firstNameClaim);
+                    user.setLastName(lastNameClaim);
+                    user.setUserId(userId);
+                    user.setServiceId(serviceId);
+                    user.setMail(emailClaim);
+                    user.setPhone(phoneClaim);
+                    user.setStatus(status);
+                    user.setRole(role);
+                    user.setExtraFields(extraFields);
                     System.setProperty(InweboConnectorConstants.AXIS2, InweboConnectorConstants.AXIS2_FILE);
                     if (provisioningEntity.getOperation() == ProvisioningOperation.POST) {
-                        provisionedId = createUser(provisioningEntity, userId, serviceId, login, firstName,
-                                name, mail, phone, status, role, access, codeType, language, extraFields, p12file, p12password);
+                        String access = configHolder.getValue(InweboConnectorConstants.INWEBO_ACCESS);
+                        String codeType = configHolder.getValue(InweboConnectorConstants.INWEBO_CODETYPE);
+                        String languageClaim = provisioningEntity.getAttributes().get(ClaimMapping
+                                .build(InweboConnectorConstants.ConnectorClaims.LANGUAGE_CLAIM,
+                                        InweboConnectorConstants.ConnectorClaims.IDP_CLAIM_URI_LANGUAGE,
+                                        (String) null, false)).get(0);
+                        String login = provisioningEntity.getEntityName().toString();
+                        user.setAccess(access);
+                        user.setCodeType(codeType);
+                        user.setLanguage(languageClaim);
+                        user.setLogin(login);
+                        provisionedId = createUser(user, p12file, p12password);
                     } else if (provisioningEntity.getOperation() == ProvisioningOperation.PUT) {
                         String loginFromClaim = provisioningEntity.getAttributes().get(ClaimMapping
-                                .build(InweboConnectorConstants.InweboConnectorClaims.USERNAME_CLAIM, null,
+                                .build(InweboConnectorConstants.ConnectorClaims.USERNAME_CLAIM, null,
                                         (String) null, false)).get(0);
-                        String firstNameFromClaim = provisioningEntity.getAttributes().get(ClaimMapping
-                                .build(InweboConnectorConstants.InweboConnectorClaims.FIRST_NAME_CLAIM,
-                                        InweboConnectorConstants.InweboConnectorClaims.FIRST_NAME_CLAIM,
-                                        (String) null, false)).get(0);
-                        String nameFromClaim = provisioningEntity.getAttributes().get(ClaimMapping
-                                .build(InweboConnectorConstants.InweboConnectorClaims.LAST_NAME_CLAIM,
-                                        InweboConnectorConstants.InweboConnectorClaims.LAST_NAME_CLAIM,
-                                        (String) null, false)).get(0);
-                        String mailFromClaim = provisioningEntity.getAttributes().get(ClaimMapping
-                                .build(InweboConnectorConstants.InweboConnectorClaims.MAIL_CLAIM,
-                                        InweboConnectorConstants.InweboConnectorClaims.MAIL_CLAIM,
-                                        (String) null, false)).get(0);
-                        String phoneFromClaim = provisioningEntity.getAttributes().get(ClaimMapping
-                                .build(InweboConnectorConstants.InweboConnectorClaims.PHONE_CLAIM,
-                                        InweboConnectorConstants.InweboConnectorClaims.PHONE_CLAIM,
-                                        (String) null, false)).get(0);
-
-                        login = StringUtils.isNotEmpty(loginFromClaim) ? loginFromClaim : login;
-                        firstName = StringUtils.isNotEmpty(firstNameFromClaim) ? firstNameFromClaim : firstName;
-                        name = StringUtils.isNotEmpty(nameFromClaim) ? nameFromClaim : name;
-                        mail = StringUtils.isNotEmpty(mailFromClaim) ? mailFromClaim : mail;
-                        phone = StringUtils.isNotEmpty(phoneFromClaim) ? phoneFromClaim : phone;
-
-                        updateUser(provisioningEntity, userId, serviceId, login, firstName, name, mail, phone, status,
-                                role, extraFields, p12file, p12password);
+                        if (StringUtils.isEmpty(loginFromClaim)) {
+                            log.error("Unable to get the username from claim.");
+                            throw new IdentityProvisioningException("Unable to get the username from claim.");
+                        }
+                        String loginId = provisioningEntity.getIdentifier().getIdentifier();
+                        user.setLogin(loginFromClaim);
+                        user.setLoginId(loginId);
+                        updateUser(user, p12file, p12password);
                     } else if (provisioningEntity.getOperation() == ProvisioningOperation.DELETE) {
                         deleteUser(provisioningEntity, serviceId, userId, p12file, p12password);
                     } else {
@@ -161,41 +157,33 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
         }
     }
 
-    private String createUser(ProvisioningEntity provisioningEntity, String userId, String serviceId, String login,
-                              String firstName, String name, String mail, String phone, String status, String role,
-                              String access, String codeType,
-                              String language, String extraFields, String p12file, String p12password)
+    private String createUser(InweboUser user, String p12file, String p12password)
             throws IdentityProvisioningException {
         String provisionedId = null;
         try {
-            Util.setHttpsClientCert(p12file, p12password);
+            InweboUserManager.setHttpsClientCert(p12file, p12password);
         } catch (Exception e) {
             throw new IdentityProvisioningException("Error while adding certificate", e);
         }
         try {
-            UserCreation userCreation = new UserCreation();
-            provisionedId = userCreation.invokeSOAP(userId, serviceId, login, firstName, name, mail, phone, status,
-                    role, access, codeType, language, extraFields);
+            InweboUserManager userManager = new InweboUserManager();
+            provisionedId = userManager.invokeSOAP(user, InweboConnectorConstants.INWEBO_OPERATION_POST);
         } catch (IdentityProvisioningException e) {
             throw new IdentityProvisioningException("Error while creating the user in InWebo:", e);
         }
         return provisionedId;
     }
 
-    private void updateUser(ProvisioningEntity provisioningEntity, String userId, String serviceId,
-                            String login, String firstName, String name, String mail, String phone, String status,
-                            String role, String extraFields, String p12file, String p12password)
+    private void updateUser(InweboUser user, String p12file, String p12password)
             throws IdentityProvisioningException {
         try {
-            Util.setHttpsClientCert(p12file, p12password);
+            InweboUserManager.setHttpsClientCert(p12file, p12password);
         } catch (Exception e) {
             throw new IdentityProvisioningException("Error while adding certificate", e);
         }
         try {
-            String loginId = provisioningEntity.getIdentifier().getIdentifier();
-            UserUpdation userUpdation = new UserUpdation();
-            userUpdation.invokeSOAP(userId, serviceId, loginId, login, firstName, name, mail,
-                    phone, status, role, extraFields);
+            InweboUserManager userManager = new InweboUserManager();
+            userManager.invokeSOAP(user, InweboConnectorConstants.INWEBO_OPERATION_PUT);
         } catch (IdentityProvisioningException e) {
             throw new IdentityProvisioningException("Error while updating the user", e);
         }
@@ -204,14 +192,18 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
     private void deleteUser(ProvisioningEntity provisioningEntity, String serviceId, String userId, String p12file,
                             String p12password) throws IdentityProvisioningException {
         try {
-            Util.setHttpsClientCert(p12file, p12password);
+            InweboUserManager.setHttpsClientCert(p12file, p12password);
         } catch (Exception e) {
             throw new IdentityProvisioningException("Error while adding certificate", e);
         }
         try {
             String loginId = provisioningEntity.getIdentifier().getIdentifier();
-            UserDeletion UserDeletion = new UserDeletion();
-            UserDeletion.deleteUser(loginId, userId, serviceId);
+            InweboUser user = new InweboUser();
+            user.setLoginId(loginId);
+            user.setUserId(userId);
+            user.setServiceId(serviceId);
+            InweboUserManager userManager = new InweboUserManager();
+            userManager.invokeSOAP(user, InweboConnectorConstants.INWEBO_OPERATION_DELETE);
         } catch (IdentityProvisioningException e) {
             throw new IdentityProvisioningException("Error while deleting the user from Inwebo", e);
         }
