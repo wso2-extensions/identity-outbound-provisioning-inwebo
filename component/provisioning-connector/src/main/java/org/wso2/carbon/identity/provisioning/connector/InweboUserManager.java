@@ -39,9 +39,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.SecureRandom;
 import java.util.Properties;
+
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.SecureRandom;
+import java.security.KeyStoreException;
+import java.security.UnrecoverableKeyException;
 
 public class InweboUserManager {
     private static final Log log = LogFactory.getLog(InweboUserManager.class);
@@ -53,8 +59,9 @@ public class InweboUserManager {
      * @param certPassword    Password of certificate
      * @throws Exception
      */
-    public static void setHttpsClientCert(String certificateFile, String certPassword)
-            throws Exception {
+    public static void setHttpsClientCert(String certificateFile, String certPassword)  throws KeyStoreException,
+            NoSuchAlgorithmException, IOException, CertificateException, UnrecoverableKeyException,
+            KeyManagementException {
         if (certificateFile == null || !new File(certificateFile).exists()) {
             return;
         }

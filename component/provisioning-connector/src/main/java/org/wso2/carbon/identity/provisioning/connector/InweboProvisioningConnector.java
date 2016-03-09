@@ -32,6 +32,13 @@ import org.wso2.carbon.identity.provisioning.ProvisioningEntityType;
 import org.wso2.carbon.identity.provisioning.AbstractOutboundProvisioningConnector;
 import org.wso2.carbon.identity.provisioning.IdentityProvisioningConstants;
 
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.KeyStoreException;
+import java.security.UnrecoverableKeyException;
+
 import java.util.Properties;
 
 public class InweboProvisioningConnector extends AbstractOutboundProvisioningConnector {
@@ -162,7 +169,8 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
         String provisionedId = null;
         try {
             InweboUserManager.setHttpsClientCert(p12file, p12password);
-        } catch (Exception e) {
+        } catch (KeyStoreException | NoSuchAlgorithmException | IOException | CertificateException
+                | UnrecoverableKeyException | KeyManagementException e) {
             throw new IdentityProvisioningException("Error while adding certificate", e);
         }
         try {
@@ -178,7 +186,8 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
             throws IdentityProvisioningException {
         try {
             InweboUserManager.setHttpsClientCert(p12file, p12password);
-        } catch (Exception e) {
+        } catch (KeyStoreException | NoSuchAlgorithmException | IOException | CertificateException
+                | UnrecoverableKeyException | KeyManagementException e) {
             throw new IdentityProvisioningException("Error while adding certificate", e);
         }
         try {
@@ -193,7 +202,8 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
                             String p12password) throws IdentityProvisioningException {
         try {
             InweboUserManager.setHttpsClientCert(p12file, p12password);
-        } catch (Exception e) {
+        } catch (KeyStoreException | NoSuchAlgorithmException | IOException | CertificateException
+                | UnrecoverableKeyException | KeyManagementException e) {
             throw new IdentityProvisioningException("Error while adding certificate", e);
         }
         try {
