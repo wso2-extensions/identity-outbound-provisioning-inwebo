@@ -61,9 +61,9 @@ public class InweboUserManager {
      */
     public static void setHttpsClientCert(String certificateFile, String certPassword)  throws KeyStoreException,
             NoSuchAlgorithmException, IOException, CertificateException, UnrecoverableKeyException,
-            KeyManagementException {
+            KeyManagementException, IdentityProvisioningException {
         if (certificateFile == null || !new File(certificateFile).exists()) {
-            return;
+            throw new IdentityProvisioningException("The certificate file is not found");
         }
         KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
@@ -91,7 +91,6 @@ public class InweboUserManager {
             try {
                 inweboProperties.load(resourceStream);
             } catch (IOException e) {
-                log.error("Unable to load the properties file", e);
                 throw new IdentityProvisioningException("Unable to load the properties file", e);
             }
 

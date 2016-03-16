@@ -148,8 +148,6 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
                     } else {
                         throw new IdentityProvisioningException("Unsupported provisioning opertaion.");
                     }
-                } else {
-                    throw new IdentityProvisioningException("Unsupported provisioning opertaion.");
                 }
             }
             // creates a provisioned identifier for the provisioned user.
@@ -159,7 +157,7 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
             }
             return identifier;
         } catch (IdentityProvisioningException e) {
-            log.error(e);
+            log.error(e.getMessage(), e);
             return null;
         }
     }
@@ -170,14 +168,14 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
         try {
             InweboUserManager.setHttpsClientCert(p12file, p12password);
         } catch (KeyStoreException | NoSuchAlgorithmException | IOException | CertificateException
-                | UnrecoverableKeyException | KeyManagementException e) {
-            throw new IdentityProvisioningException("Error while adding certificate", e);
+                | UnrecoverableKeyException | KeyManagementException | IdentityProvisioningException e) {
+            throw new IdentityProvisioningException("Error while adding certificate: " + e.getMessage(), e);
         }
         try {
             InweboUserManager userManager = new InweboUserManager();
             provisionedId = userManager.invokeSOAP(user, InweboConnectorConstants.INWEBO_OPERATION_POST);
         } catch (IdentityProvisioningException e) {
-            throw new IdentityProvisioningException("Error while creating the user in InWebo:", e);
+            throw new IdentityProvisioningException("Error while creating the user in InWebo: " + e.getMessage(), e);
         }
         return provisionedId;
     }
@@ -187,14 +185,14 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
         try {
             InweboUserManager.setHttpsClientCert(p12file, p12password);
         } catch (KeyStoreException | NoSuchAlgorithmException | IOException | CertificateException
-                | UnrecoverableKeyException | KeyManagementException e) {
-            throw new IdentityProvisioningException("Error while adding certificate", e);
+                | UnrecoverableKeyException | KeyManagementException | IdentityProvisioningException e) {
+            throw new IdentityProvisioningException("Error while adding certificate: " + e.getMessage(), e);
         }
         try {
             InweboUserManager userManager = new InweboUserManager();
             userManager.invokeSOAP(user, InweboConnectorConstants.INWEBO_OPERATION_PUT);
         } catch (IdentityProvisioningException e) {
-            throw new IdentityProvisioningException("Error while updating the user", e);
+            throw new IdentityProvisioningException("Error while updating the user: " + e.getMessage(), e);
         }
     }
 
@@ -203,8 +201,8 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
         try {
             InweboUserManager.setHttpsClientCert(p12file, p12password);
         } catch (KeyStoreException | NoSuchAlgorithmException | IOException | CertificateException
-                | UnrecoverableKeyException | KeyManagementException e) {
-            throw new IdentityProvisioningException("Error while adding certificate", e);
+                | UnrecoverableKeyException | KeyManagementException | IdentityProvisioningException e) {
+            throw new IdentityProvisioningException("Error while adding certificate: " + e.getMessage(), e);
         }
         try {
             String loginId = provisioningEntity.getIdentifier().getIdentifier();
@@ -215,7 +213,7 @@ public class InweboProvisioningConnector extends AbstractOutboundProvisioningCon
             InweboUserManager userManager = new InweboUserManager();
             userManager.invokeSOAP(user, InweboConnectorConstants.INWEBO_OPERATION_DELETE);
         } catch (IdentityProvisioningException e) {
-            throw new IdentityProvisioningException("Error while deleting the user from Inwebo", e);
+            throw new IdentityProvisioningException("Error while deleting the user from Inwebo: " + e.getMessage(), e);
         }
     }
 }
