@@ -18,13 +18,12 @@
     <parent>
         <groupId>org.wso2.carbon.extension.identity.provisioning.connector</groupId>
         <artifactId>org.wso2.carbon.extension.identity.provisioning.connector</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.carbon.identity.provisioning.connector</groupId>
     <artifactId>org.wso2.carbon.identity.provisioning.connector.inwebo</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Identity Provisioning Connector For Inwebo</name>
     <url>http://wso2.org</url>
