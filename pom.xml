@@ -21,7 +21,7 @@
         <version>4.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.carbon.extension.identity.provisioning.connector</groupId>
+    <groupId>org.wso2.carbon.extension.identity.provisioning</groupId>
     <artifactId>org.wso2.carbon.extension.identity.provisioning.connector</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
