@@ -59,7 +59,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    org.wso2.carbon.identity.provisioning.connector:org.wso2.carbon.identity.provisioning.connector.inwebo
+                                    org.wso2.carbon.identity.provisioning:org.wso2.carbon.identity.provisioning.connector.inwebo
                                 </bundleDef>
                             </bundles>
                         </configuration>
