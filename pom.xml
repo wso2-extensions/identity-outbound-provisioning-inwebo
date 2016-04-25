@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.carbon.extension.identity.provisioning.connector</groupId>
     <artifactId>org.wso2.carbon.extension.identity.provisioning.connector</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>WSO2 Carbon Extension - Inwebo Pom</name>
     <url>http://wso2.org</url>
