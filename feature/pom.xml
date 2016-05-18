@@ -30,8 +30,8 @@
     <description>This feature contains extension feature for Inwebo</description>
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon.identity.provisioning</groupId>
-            <artifactId>org.wso2.carbon.identity.provisioning.connector.inwebo</artifactId>
+            <groupId>org.wso2.carbon.extension.identity.provisioning</groupId>
+            <artifactId>org.wso2.carbon.extension.identity.provisioning.connector.inwebo</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -49,7 +49,7 @@
                             <goal>p2-feature-gen</goal>
                         </goals>
                         <configuration>
-                            <id>org.wso2.carbon.identity.provisioning.connector.inwebo</id>
+                            <id>org.wso2.carbon.extension.identity.provisioning.connector.inwebo</id>
                             <propertiesFile>feature.properties</propertiesFile>
                             <adviceFile>
                                 <properties>
@@ -59,7 +59,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    org.wso2.carbon.identity.provisioning:org.wso2.carbon.identity.provisioning.connector.inwebo
+                                    org.wso2.carbon.extension.identity.provisioning:org.wso2.carbon.extension.identity.provisioning.connector.inwebo
                                 </bundleDef>
                             </bundles>
                         </configuration>
