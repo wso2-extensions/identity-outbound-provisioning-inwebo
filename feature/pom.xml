@@ -22,8 +22,8 @@
         <version>1.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <groupId>org.wso2.carbon.identity.provisioning</groupId>
-    <artifactId>org.wso2.carbon.identity.provisioning.connector.inwebo.feature</artifactId>
+    <groupId>org.wso2.carbon.extension.identity.provisioning</groupId>
+    <artifactId>org.wso2.carbon.extension.identity.provisioning.connector.inwebo.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Identity Inwebo Provisioning Feature</name>
     <url>http://wso2.org</url>
